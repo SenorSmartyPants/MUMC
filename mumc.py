@@ -4401,6 +4401,8 @@ def print_byType(string_to_print,ok_to_print):
 # save media items ready to be deleted
 # remove media items with exceptions (i.e. favorited, whitelisted, whitetagged, etc...)
 def get_media_items():
+    SERIESSORTBY = 'SeriesSortName,ParentIndexNumber,IndexNumber,Name'
+
     server_url=cfg.server_url
     auth_key=cfg.auth_key
     api_query_attempts=cfg.api_query_attempts
@@ -5301,7 +5303,7 @@ def get_media_items():
                     #Build query for watched media items in blacklists
                     IncludeItemTypes_Blacklist='Episode'
                     FieldsState_Blacklist='Id,ParentId,Path,Tags,MediaSources,DateCreated,Genres,Studios,SeriesStudio,seriesStatus'
-                    SortBy_Blacklist='SeriesName,ParentIndexNumber,IndexNumber,Name'
+                    SortBy_Blacklist=SERIESSORTBY
                     SortOrder_Blacklist='Ascending'
                     EnableUserData_Blacklist='True'
                     Recursive_Blacklist='True'
@@ -5320,7 +5322,7 @@ def get_media_items():
                     #Build query for Favorited_From_Blacklist media items
                     IncludeItemTypes_Favorited_From_Blacklist='Episode,Season,Series,CollectionFolder'
                     FieldsState_Favorited_From_Blacklist='Id,ParentId,Path,Tags,MediaSources,DateCreated,Genres,Studios,SeriesStudio,seriesStatus'
-                    SortBy_Favorited_From_Blacklist='SeriesName,ParentIndexNumber,IndexNumber,Name'
+                    SortBy_Favorited_From_Blacklist=SERIESSORTBY
                     SortOrder_Favorited_From_Blacklist='Ascending'
                     EnableUserData_Favorited_From_Blacklist='True'
                     Recursive_Favorited_From_Blacklist='True'
@@ -5339,7 +5341,7 @@ def get_media_items():
                     #Build query for Favorited_From_Whitelist media items
                     IncludeItemTypes_Favorited_From_Whitelist='Episode,Season,Series,CollectionFolder'
                     FieldsState_Favorited_From_Whitelist='Id,ParentId,Path,Tags,MediaSources,DateCreated,Genres,Studios,SeriesStudio,seriesStatus'
-                    SortBy_Favorited_From_Whitelist='SeriesName,ParentIndexNumber,IndexNumber,Name'
+                    SortBy_Favorited_From_Whitelist=SERIESSORTBY
                     SortOrder_Favorited_From_Whitelist='Ascending'
                     EnableUserData_Favorited_From_Whitelist='True'
                     Recursive_Favorited_From_Whitelist='True'
@@ -5358,7 +5360,7 @@ def get_media_items():
                     #Build query for blacktagged media items from blacklist
                     IncludeItemTypes_BlackTagged_From_BlackList='Episode,Season,Series,CollectionFolder'
                     FieldsState_BlackTagged_From_BlackList='Id,ParentId,Path,Tags,MediaSources,DateCreated,Genres,Studios,SeriesStudio,seriesStatus'
-                    SortBy_BlackTagged_From_BlackList='ParentIndexNumber,IndexNumber,Name'
+                    SortBy_BlackTagged_From_BlackList=SERIESSORTBY
                     SortOrder_BlackTagged_From_BlackList='Ascending'
                     EnableUserData_Blacktagged_From_BlackList='True'
                     Recursive_Blacktagged_From_BlackList='True'
@@ -5378,7 +5380,7 @@ def get_media_items():
                     #Build query for blacktagged media items from whitelist
                     IncludeItemTypes_BlackTagged_From_WhiteList='Episode,Season,Series,CollectionFolder'
                     FieldsState_BlackTagged_From_WhiteList='Id,ParentId,Path,Tags,MediaSources,DateCreated,Genres,Studios,SeriesStudio,seriesStatus'
-                    SortBy_BlackTagged_From_WhiteList='ParentIndexNumber,IndexNumber,Name'
+                    SortBy_BlackTagged_From_WhiteList=SERIESSORTBY
                     SortOrder_BlackTagged_From_WhiteList='Ascending'
                     EnableUserData_Blacktagged_From_WhiteList='True'
                     Recursive_Blacktagged_From_WhiteList='True'
@@ -5398,7 +5400,7 @@ def get_media_items():
                     #Build query for whitetagged media items
                     IncludeItemTypes_WhiteTagged_From_Blacklist='Episode,Season,Series,CollectionFolder'
                     FieldsState_WhiteTagged_From_Blacklist='Id,ParentId,Path,Tags,MediaSources,DateCreated,Genres,Studios,SeriesStudio,seriesStatus'
-                    SortBy_WhiteTagged_From_Blacklist='ParentIndexNumber,IndexNumber,Name'
+                    SortBy_WhiteTagged_From_Blacklist=SERIESSORTBY
                     SortOrder_WhiteTagged_From_Blacklist='Ascending'
                     EnableUserData_Whitetagged_From_Blacklist='True'
                     Recursive_Whitetagged_From_Blacklist='True'
@@ -5418,7 +5420,7 @@ def get_media_items():
                     #Build query for whitetagged media items
                     IncludeItemTypes_WhiteTagged_From_Whitelist='Episode,Season,Series,CollectionFolder'
                     FieldsState_WhiteTagged_From_Whitelist='Id,ParentId,Path,Tags,MediaSources,DateCreated,Genres,Studios,SeriesStudio,seriesStatus'
-                    SortBy_WhiteTagged_From_Whitelist='ParentIndexNumber,IndexNumber,Name'
+                    SortBy_WhiteTagged_From_Whitelist=SERIESSORTBY
                     SortOrder_WhiteTagged_From_Whitelist='Ascending'
                     EnableUserData_Whitetagged_From_Whitelist='True'
                     Recursive_Whitetagged_From_Whitelist='True'
@@ -5811,7 +5813,7 @@ def get_media_items():
                     #Build query for watched media items in blacklists
                     IncludeItemTypes_Blacklist='Audio'
                     FieldsState_Blacklist='Id,ParentId,Path,Tags,MediaSources,DateCreated,Genres,Studios,ArtistItems,AlbumId,AlbumArtists'
-                    SortBy_Blacklist='SeriesName,ParentIndexNumber,IndexNumber,Name'
+                    SortBy_Blacklist=SERIESSORTBY
                     SortOrder_Blacklist='Ascending'
                     EnableUserData_Blacklist='True'
                     Recursive_Blacklist='True'
@@ -5830,7 +5832,7 @@ def get_media_items():
                     #Build query for Favorited_From_Blacklist media items
                     IncludeItemTypes_Favorited_From_Blacklist='Audio,MusicAlbum,Playlist,CollectionFolder'
                     FieldsState_Favorited_From_Blacklist='Id,ParentId,Path,Tags,MediaSources,DateCreated,Genres,Studios,ArtistItems,AlbumId,AlbumArtists'
-                    SortBy_Favorited_From_Blacklist='SeriesName,ParentIndexNumber,IndexNumber,Name'
+                    SortBy_Favorited_From_Blacklist=SERIESSORTBY
                     SortOrder_Favorited_From_Blacklist='Ascending'
                     EnableUserData_Favorited_From_Blacklist='True'
                     Recursive_Favorited_From_Blacklist='True'
@@ -5849,7 +5851,7 @@ def get_media_items():
                     #Build query for Favorited_From_Whitelist media items
                     IncludeItemTypes_Favorited_From_Whitelist='Audio,MusicAlbum,Playlist,CollectionFolder'
                     FieldsState_Favorited_From_Whitelist='Id,ParentId,Path,Tags,MediaSources,DateCreated,Genres,Studios,ArtistItems,AlbumId,AlbumArtists'
-                    SortBy_Favorited_From_Whitelist='SeriesName,ParentIndexNumber,IndexNumber,Name'
+                    SortBy_Favorited_From_Whitelist=SERIESSORTBY
                     SortOrder_Favorited_From_Whitelist='Ascending'
                     EnableUserData_Favorited_From_Whitelist='True'
                     Recursive_Favorited_From_Whitelist='True'
@@ -6306,7 +6308,7 @@ def get_media_items():
                     #Build query for watched media items in blacklists
                     IncludeItemTypes_Blacklist='Audio'
                     FieldsState_Blacklist='Id,ParentId,Path,Tags,MediaSources,DateCreated,Genres,Studios,ArtistItems,AlbumId,AlbumArtists'
-                    SortBy_Blacklist='SeriesName,ParentIndexNumber,IndexNumber,Name'
+                    SortBy_Blacklist=SERIESSORTBY
                     SortOrder_Blacklist='Ascending'
                     EnableUserData_Blacklist='True'
                     Recursive_Blacklist='True'
@@ -6325,7 +6327,7 @@ def get_media_items():
                     #Build query for Favorited_From_Blacklist media items
                     IncludeItemTypes_Favorited_From_Blacklist='Audio,Book,MusicAlbum,Playlist,CollectionFolder'
                     FieldsState_Favorited_From_Blacklist='Id,ParentId,Path,Tags,MediaSources,DateCreated,Genres,Studios,ArtistItems,AlbumId,AlbumArtists'
-                    SortBy_Favorited_From_Blacklist='SeriesName,ParentIndexNumber,IndexNumber,Name'
+                    SortBy_Favorited_From_Blacklist=SERIESSORTBY
                     SortOrder_Favorited_From_Blacklist='Ascending'
                     EnableUserData_Favorited_From_Blacklist='True'
                     Recursive_Favorited_From_Blacklist='True'
@@ -6344,7 +6346,7 @@ def get_media_items():
                     #Build query for Favorited_From_Whitelist media items
                     IncludeItemTypes_Favorited_From_Whitelist='Audio,Book,MusicAlbum,Playlist,CollectionFolder'
                     FieldsState_Favorited_From_Whitelist='Id,ParentId,Path,Tags,MediaSources,DateCreated,Genres,Studios,ArtistItems,AlbumId,AlbumArtists'
-                    SortBy_Favorited_From_Whitelist='SeriesName,ParentIndexNumber,IndexNumber,Name'
+                    SortBy_Favorited_From_Whitelist=SERIESSORTBY
                     SortOrder_Favorited_From_Whitelist='Ascending'
                     EnableUserData_Favorited_From_Whitelist='True'
                     Recursive_Favorited_From_Whitelist='True'
