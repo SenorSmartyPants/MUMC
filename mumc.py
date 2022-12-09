@@ -26,7 +26,7 @@ cache = dict()
 #Get the current script version
 def get_script_version():
 
-    Version='3.2.14'
+    Version='3.3.0'
 
     return(Version)
 
@@ -1362,6 +1362,26 @@ def build_configuration_file(cfg,updateConfig):
         config_file += "multiuser_play_count_audio=" + str(cfg.multiuser_play_count_audio) + "\n"
         if (isJellyfinServer()):
             config_file += "multiuser_play_count_audiobook=" + str(cfg.multiuser_play_count_audiobook) + "\n"
+    #config_file += "#----------------------------------------------------------#\n"
+    config_file += "\n"
+    config_file += "#----------------------------------------------------------#\n"
+    config_file += "# Decide how play state with multiple users will behave\n"
+    config_file += "#  0 - ok to delete media item when ANY monitored users meet the *_played_days\n"
+    config_file += "#  1 - ok to delete media item when ALL monitored users meet the *_played_days\n"
+    config_file += "# (0 : default)\n"
+    config_file += "#----------------------------------------------------------\n"
+    if not (updateConfig):
+        config_file += "multiuser_play_days_movie=" + str(get_default_config_values('multiuser_play_days_movie')) + "\n"
+        config_file += "multiuser_play_days_episode=" + str(get_default_config_values('multiuser_play_days_episode')) + "\n"
+        config_file += "multiuser_play_days_audio=" + str(get_default_config_values('multiuser_play_days_audio')) + "\n"
+        if (isJellyfinServer()):
+            config_file += "multiuser_play_days_audiobook=" + str(get_default_config_values('multiuser_play_days_audiobook')) + "\n"
+    elif (updateConfig):
+        config_file += "multiuser_play_days_movie=" + str(cfg.multiuser_play_days_movie) + "\n"
+        config_file += "multiuser_play_days_episode=" + str(cfg.multiuser_play_days_episode) + "\n"
+        config_file += "multiuser_play_days_audio=" + str(cfg.multiuser_play_days_audio) + "\n"
+        if (isJellyfinServer()):
+            config_file += "multiuser_play_days_audiobook=" + str(cfg.multiuser_play_days_audiobook) + "\n"
     #config_file += "#----------------------------------------------------------#\n"
     config_file += "\n"
     config_file += "#----------------------------------------------------------#\n"
@@ -4064,6 +4084,10 @@ def get_isplaycount_MetByAllUsers(playcount_met, deleteItems):
     return get_isblacktagged_watchedByAllUsers(playcount_met, deleteItems)
 
 
+#Determine if media item met the play state filter for all users
+def get_isplaydays_MetByAllUsers(playstate_met, deleteItems):
+    return get_isblacktagged_watchedByAllUsers(playstate_met, deleteItems)
+
 # determine if media item has been played specified amount of times
 def get_playedStatus(item,media_condition,filter_count_comparison,filter_count):
 
@@ -4449,6 +4473,7 @@ def get_media_items():
         movie_played_count=cfg.movie_played_count
         movie_created_played_count=cfg.movie_created_played_count
         multiuser_play_count_movie=cfg.multiuser_play_count_movie
+        multiuser_play_days_movie=cfg.multiuser_play_days_movie
         keep_favorites_movie=cfg.keep_favorites_movie
         multiuser_whitelist_movie=cfg.multiuser_whitelist_movie
         delete_blacktagged_movie=cfg.delete_blacktagged_movie
@@ -4461,6 +4486,8 @@ def get_media_items():
         isfav_byUserId_Movie={}
         #dictionary of items meeting the play count filter by userId
         isMeeting_PlayCountFilter_Movie={}
+        #dictionary of items meeting the played state by userId
+        isMeeting_PlayDaysFilter_Movie={}
         #dictionary of blacktagged items by userId
         isblacktag_and_watched_byUserId_Movie={}
         #whitelisted Id per media type according to media types metadata
@@ -4477,6 +4504,7 @@ def get_media_items():
         episode_played_count=cfg.episode_played_count
         episode_created_played_count=cfg.episode_created_played_count
         multiuser_play_count_episode=cfg.multiuser_play_count_episode
+        multiuser_play_days_episode=cfg.multiuser_play_days_episode
         keep_favorites_episode=cfg.keep_favorites_episode
         multiuser_whitelist_episode=cfg.multiuser_whitelist_episode
         delete_blacktagged_episode=cfg.delete_blacktagged_episode
@@ -4495,6 +4523,8 @@ def get_media_items():
         isfav_byUserId_Episode={}
         #dictionary of items meeting the play count filter by userId
         isMeeting_PlayCountFilter_Episode={}
+        #dictionary of items meeting the played state by userId
+        isMeeting_PlayDaysFilter_Episode={}
         #dictionary of blacktagged items by userId
         isblacktag_and_watched_byUserId_Episode={}
         #whitelisted Id per media type according to media types metadata
@@ -4511,6 +4541,7 @@ def get_media_items():
         audio_played_count=cfg.audio_played_count
         audio_created_played_count=cfg.audio_created_played_count
         multiuser_play_count_audio=cfg.multiuser_play_count_audio
+        multiuser_play_days_audio=cfg.multiuser_play_days_audio
         keep_favorites_audio=cfg.keep_favorites_audio
         multiuser_whitelist_audio=cfg.multiuser_whitelist_audio
         delete_blacktagged_audio=cfg.delete_blacktagged_audio
@@ -4525,6 +4556,8 @@ def get_media_items():
         isfav_byUserId_Audio={}
         #dictionary of items meeting the play count filter by userId
         isMeeting_PlayCountFilter_Audio={}
+        #dictionary of items meeting the play state by userId
+        isMeeting_PlayDaysFilter_Audio={}
         #dictionary of blacktagged items by userId
         isblacktag_and_watched_byUserId_Audio={}
         #whitelisted Id per media type according to media types metadata
@@ -4541,6 +4574,7 @@ def get_media_items():
         audiobook_played_count=cfg.audiobook_played_count
         audiobook_created_played_count=cfg.audiobook_created_played_count
         multiuser_play_count_audiobook=cfg.multiuser_play_count_audiobook
+        multiuser_play_days_audiobook=cfg.multiuser_play_days_audiobook
         keep_favorites_audiobook=cfg.keep_favorites_audiobook
         multiuser_whitelist_audiobook=cfg.multiuser_whitelist_audiobook
         delete_blacktagged_audiobook=cfg.delete_blacktagged_audiobook
@@ -4555,6 +4589,8 @@ def get_media_items():
         isfav_byUserId_AudioBook={}
         #dictionary of items meeting the play count filter by userId
         isMeeting_PlayCountFilter_AudioBook={}
+        #dictionary of items meeting the play state by userId
+        isMeeting_PlayDaysFilter_AudioBook={}
         #dictionary of blacktagged items by userId
         isblacktag_and_watched_byUserId_AudioBook={}
         #whitelisted Id per media type according to media types metadata
@@ -4679,6 +4715,8 @@ def get_media_items():
             isfav_byUserId_Movie[user_key]={}
             #define dictionary user key to story media items meeting the play count filter by userId and itemId
             isMeeting_PlayCountFilter_Movie[user_key]={}
+            #define dictionary user key to story media items meeting the play state by userId and itemId
+            isMeeting_PlayDaysFilter_Movie[user_key]={}
             #dictionary of blacktagged items by userId
             isblacktag_and_watched_byUserId_Movie[user_key]={}
         if ((episode_played_days >= 0) or (episode_created_days >= 0)):
@@ -4686,6 +4724,8 @@ def get_media_items():
             isfav_byUserId_Episode[user_key]={}
             #define dictionary user key to story media items meeting the play count filter by userId and itemId
             isMeeting_PlayCountFilter_Episode[user_key]={}
+            #define dictionary user key to story media items meeting the played state by userId and itemId
+            isMeeting_PlayDaysFilter_Episode[user_key]={}
             #dictionary of blacktagged items by userId
             isblacktag_and_watched_byUserId_Episode[user_key]={}
             episodeCounts_byUserId[user_key]=defaultdict(dict)
@@ -4694,6 +4734,8 @@ def get_media_items():
             isfav_byUserId_Audio[user_key]={}
             #define dictionary user key to story media items meeting the play count filter by userId and itemId
             isMeeting_PlayCountFilter_Audio[user_key]={}
+            #define dictionary user key to story media items meeting the play state by userId and itemId
+            isMeeting_PlayDaysFilter_Audio[user_key]={}
             #dictionary of blacktagged items by userId
             isblacktag_and_watched_byUserId_Audio[user_key]={}
         if ((audiobook_played_days >= 0) or (audiobook_created_days >= 0)):
@@ -4701,6 +4743,8 @@ def get_media_items():
             isfav_byUserId_AudioBook[user_key]={}
             #define dictionary user key to story media items meeting the play count filter by userId and itemId
             isMeeting_PlayCountFilter_AudioBook[user_key]={}
+            #define dictionary user key to story media items meeting the play state by userId and itemId
+            isMeeting_PlayDaysFilter_AudioBook[user_key]={}
             #dictionary of blacktagged items by userId
             isblacktag_and_watched_byUserId_AudioBook[user_key]={}
 
@@ -5231,6 +5275,9 @@ def get_media_items():
                                     if ((multiuser_play_count_movie == 1) and (item_matches_played_count_filter)):
                                         isMeeting_PlayCountFilter_Movie[user_key][item['Id']]=True
 
+                                    if ((multiuser_play_days_movie == 1) and (item_matches_played_condition_day_filter)):
+                                        isMeeting_PlayDaysFilter_Movie[user_key][item['Id']]=True
+
                                     #Decide if media item meets the created count filter criteria
                                     if (('DateCreated' in item)):
                                         item_matches_created_played_count_filter=get_createdStatus(item,'created',movie_created_played_count_comparison,movie_created_played_count)
@@ -5723,6 +5770,9 @@ def get_media_items():
 
                                     if ((multiuser_play_count_episode == 1) and (item_matches_played_count_filter)):
                                         isMeeting_PlayCountFilter_Episode[user_key][item['Id']]=True
+
+                                    if ((multiuser_play_days_episode == 1) and (item_matches_played_condition_day_filter)):
+                                        isMeeting_PlayDaysFilter_Episode[user_key][item['Id']]=True
 
                                     #Decide if media item meets the created count filter criteria
                                     if (('DateCreated' in item)):
@@ -6236,6 +6286,9 @@ def get_media_items():
                                     if ((multiuser_play_count_audio == 1) and (item_matches_played_count_filter)):
                                         isMeeting_PlayCountFilter_Audio[user_key][item['Id']]=True
 
+                                    if ((multiuser_play_days_audio == 1) and (item_matches_played_condition_day_filter)):
+                                        isMeeting_PlayDaysFilter_Audio[user_key][item['Id']]=True
+
                                     #Decide if media item meets the created count filter criteria
                                     if (('DateCreated' in item)):
                                         item_matches_created_played_count_filter=get_createdStatus(item,'created',audio_created_played_count_comparison,audio_created_played_count)
@@ -6733,6 +6786,9 @@ def get_media_items():
                                     if ((multiuser_play_count_audiobook == 1) and (item_matches_played_count_filter)):
                                         isMeeting_PlayCountFilter_AudioBook[user_key][item['Id']]=True
 
+                                    if ((multiuser_play_days_audiobook == 1) and (item_matches_played_condition_day_filter)):
+                                        isMeeting_PlayDaysFilter_AudioBook[user_key][item['Id']]=True
+
                                     #Decide if media item meets the created count filter criteria
                                     if (('DateCreated' in item)):
                                         item_matches_created_played_count_filter=get_createdStatus(item,'created',audiobook_created_played_count_comparison,audiobook_created_played_count)
@@ -6957,6 +7013,36 @@ def get_media_items():
         if ((isJellyfinServer()) and ((audiobook_played_days >= 0) or (audiobook_created_days >= 0))):
             appendTo_DEBUG_log('\nisplaycountmet_AUDIOBOOK: ',3)
             appendTo_DEBUG_log("\n" + convert2json(isMeeting_PlayCountFilter_AudioBook),3)
+            appendTo_DEBUG_log("\n",3)
+
+    #When filtered; Determine media items to remove them from deletion list depending on cfg.multiuser_play_days_*
+    if (((movie_played_days >= 0) or (movie_created_days >= 0)) and (multiuser_play_days_movie == 1)):
+        deleteItems=get_isplaydays_MetByAllUsers(isMeeting_PlayDaysFilter_Movie, deleteItems)
+    if (((episode_played_days >= 0) or (episode_created_days >= 0)) and (multiuser_play_days_episode == 1)):
+        deleteItems=get_isplaydays_MetByAllUsers(isMeeting_PlayDaysFilter_Episode, deleteItems)
+    if (((audio_played_days >= 0) or (audio_created_days >= 0)) and (multiuser_play_days_audio == 1)):
+        deleteItems=get_isplaydays_MetByAllUsers(isMeeting_PlayDaysFilter_Audio, deleteItems)
+    if ((isJellyfinServer()) and ((audiobook_played_days >= 0) or (audiobook_created_days >= 0)) and (multiuser_play_days_audiobook == 1)):
+        deleteItems=get_isplaydays_MetByAllUsers(isMeeting_PlayDaysFilter_AudioBook, deleteItems)
+
+    if (GLOBAL_DEBUG):
+        appendTo_DEBUG_log('\n-----------------------------------------------------------',3)
+        appendTo_DEBUG_log("\n",3)
+        if ((movie_played_days >= 0) or (movie_created_days >= 0)):
+            appendTo_DEBUG_log('\nisplaydaysmet_MOVIE: ',3)
+            appendTo_DEBUG_log("\n" + convert2json(isMeeting_PlayDaysFilter_Movie),3)
+            appendTo_DEBUG_log("\n",3)
+        if ((episode_played_days >= 0) or (episode_created_days >= 0)):
+            appendTo_DEBUG_log('\nisplaydaysmet_EPISODE: ',3)
+            appendTo_DEBUG_log("\n" + convert2json(isMeeting_PlayDaysFilter_Episode),3)
+            appendTo_DEBUG_log("\n",3)
+        if ((audio_played_days >= 0) or (audio_created_days >= 0)):
+            appendTo_DEBUG_log('\nisplaydaysmet_AUDIO: ',3)
+            appendTo_DEBUG_log("\n" + convert2json(isMeeting_PlayDaysFilter_Audio),3)
+            appendTo_DEBUG_log("\n",3)
+        if ((isJellyfinServer()) and ((audiobook_played_days >= 0) or (audiobook_created_days >= 0))):
+            appendTo_DEBUG_log('\nisplaydaysmet_AUDIOBOOK: ',3)
+            appendTo_DEBUG_log("\n" + convert2json(isMeeting_PlayDaysFilter_AudioBook),3)
             appendTo_DEBUG_log("\n",3)
 
     #When enabled; Keep a minimum number of episodes
@@ -7738,6 +7824,61 @@ def cfgCheck():
                 error_found_in_mumc_config_py+='ConfigValueError: multiuser_play_count_audiobook must be an integer; valid values 0 and 1\n'
         else:
             error_found_in_mumc_config_py+='ConfigNameError: The multiuser_play_count_audiobook variable is missing from mumc_config.py\n'
+
+#######################################################################################################
+
+    if hasattr(cfg, 'multiuser_play_days_movie'):
+        check=cfg.multiuser_play_days_movie
+        if (GLOBAL_DEBUG):
+            appendTo_DEBUG_log("\nmultiuser_play_days_movie=" + str(check),2)
+        if (
+            not ((type(check) is int) and
+            (check >= 0) and
+            (check <= 1))
+        ):
+            error_found_in_mumc_config_py+='ConfigValueError: multiuser_play_days_movie must be an integer; valid values 0 and 1\n'
+    else:
+        error_found_in_mumc_config_py+='ConfigNameError: The multiuser_play_days_movie variable is missing from mumc_config.py\n'
+
+    if hasattr(cfg, 'multiuser_play_days_episode'):
+        check=cfg.multiuser_play_days_episode
+        if (GLOBAL_DEBUG):
+            appendTo_DEBUG_log("\nmultiuser_play_days_episode=" + str(check),2)
+        if (
+            not ((type(check) is int) and
+            (check >= 0) and
+            (check <= 1))
+        ):
+            error_found_in_mumc_config_py+='ConfigValueError: multiuser_play_days_episode must be an integer; valid values 0 and 1\n'
+    else:
+        error_found_in_mumc_config_py+='ConfigNameError: The multiuser_play_days_episode variable is missing from mumc_config.py\n'
+
+    if hasattr(cfg, 'multiuser_play_days_audio'):
+        check=cfg.multiuser_play_days_audio
+        if (GLOBAL_DEBUG):
+            appendTo_DEBUG_log("\nmultiuser_play_days_audio=" + str(check),2)
+        if (
+            not ((type(check) is int) and
+            (check >= 0) and
+            (check <= 1))
+        ):
+            error_found_in_mumc_config_py+='ConfigValueError: multiuser_play_days_audio must be an integer; valid values 0 and 1\n'
+    else:
+        error_found_in_mumc_config_py+='ConfigNameError: The multiuser_play_days_audio variable is missing from mumc_config.py\n'
+
+    if (isJellyfinServer()):
+        if hasattr(cfg, 'multiuser_play_days_audiobook'):
+            check=cfg.multiuser_play_days_audiobook
+            if (GLOBAL_DEBUG):
+                appendTo_DEBUG_log("\nmultiuser_play_days_audiobook=" + str(check),2)
+            if (
+                not ((type(check) is int) and
+                (check >= 0) and
+                (check <= 1))
+            ):
+                error_found_in_mumc_config_py+='ConfigValueError: multiuser_play_days_audiobook must be an integer; valid values 0 and 1\n'
+        else:
+            error_found_in_mumc_config_py+='ConfigNameError: The multiuser_play_days_audiobook variable is missing from mumc_config.py\n'
 
 #######################################################################################################
 
