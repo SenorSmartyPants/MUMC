@@ -15,6 +15,10 @@ import os
 from dateutil.parser import parse
 from collections import defaultdict
 from datetime import datetime,timedelta,timezone
+from sys import getsizeof
+from sys import argv
+from sys import path
+import importlib
 from mumc_config_defaults import get_default_config_values
 
 cache = dict()
@@ -22,7 +26,7 @@ cache = dict()
 #Get the current script version
 def get_script_version():
 
-    Version='3.2.11'
+    Version='3.2.14'
 
     return(Version)
 
@@ -8667,12 +8671,20 @@ def cfgCheck():
             appendTo_DEBUG_log("\n" + error_found_in_mumc_config_py,2)
         raise RuntimeError('\n' + error_found_in_mumc_config_py)
 
+
+def defaultHelper():
+    #print_byType('\nUse -h or -help for command line option(s)',True)
+    print_byType('\nFor help use -h or -help',True)
+    print_byType('\n/path/to/python3.x /path/to/mumc.py -help',True)
+    print_byType('',True)
+    exit(0)
 #######################################################################################################
 
 
 ############# START OF SCRIPT #############
 
 #Declare global variables
+GLOBAL_DEBUG=0
 GLOBAL_CONFIG_FILE_NAME='mumc_config.py'
 GLOBAL_DEBUG_FILE_NAME='mumc_DEBUG.log'
 #get current working directory
@@ -8686,10 +8698,65 @@ if os.path.exists(GLOBAL_DEBUG_FILE_NAME):
 #change back to original working directory
 os.chdir(GLOBAL_CWD)
 
+GLOBAL_TRIED_ALT_CONFIG=False
+
 try:
-    #try importing the mumc_config.py file
-    #if mumc_config.py file does not exsit go to except and create one
-    import mumc_config as cfg
+
+    if (len(argv) == 1):
+        #try importing the mumc_config.py file
+        #if mumc_config.py file does not exist go to except and create one
+        import mumc_config as cfg
+    else:
+        for cmdOption in argv:
+            if (cmdOption == '-h') or ((cmdOption == '-help')):
+                print_byType('\nMUMC Version: ' + get_script_version(),True)
+                print_byType('Multi-User Media Cleaner aka MUMC (pronounced Mew-Mick) will go through movies, tv episodes, audio tracks, and audiobooks in your Emby/Jellyfin libraries and delete media items you no longer want to keep.',True)
+                print_byType('',True)
+                print_byType('Usage:',True)
+                print_byType('/path/to/python3.x /path/to/mumc.py [-option] [arg]',True)
+                print_byType('',True)
+                print_byType('Options:',True)
+                print_byType('-c, -config          Specify alternate *.py configuration file',True)
+                print_byType('-h, -help            Show this help menu',True)
+                print_byType('',True)
+                print_byType('Latest Release:',True)
+                print_byType('https://github.com/terrelsa13/MUMC/releases',True)
+                print_byType('',True)
+                exit(0)
+        if ((argv[1] == '-c') and (len(argv) == 3)):
+            GLOBAL_TRIED_ALT_CONFIG=True
+            #Attempt to import the alternate config file as cfg
+            #Check for the .py extension and no spaces or periods in the module name
+            if ((os.path.splitext(argv[2])[1] == '.py') and
+                ((os.path.basename(os.path.splitext(argv[2])[0])).count(".") == 0) and
+                ((os.path.basename(os.path.splitext(argv[2])[0])).count(" ") == 0)):
+                #Get path without file.name
+                altConfigPath=os.path.dirname(argv[2])
+                #Get file without extension
+                altConfigFileNoExt=os.path.basename(os.path.splitext(argv[2])[0])
+                #Add directory of alternate config to path so it can be imported
+                path.append(altConfigPath)
+                #Cannot do a direct import using a variable; use the importlib.import_module instead
+                cfg = importlib.import_module(altConfigFileNoExt)
+            else:
+                print_byType('',True)
+                print_byType('Alternate configuration file must have a .py extension and follow the Python module naming convention',True)
+                print_byType('',True)
+                print_byType('These are NOT valid module names:',True)
+                print_byType('',True)
+                print_byType('\t/path/to/alternate.module.py',True)
+                print_byType('\t/path/to/alternate module.py',True)
+                print_byType('\tc:\\path\\to\\alternate.module.py',True)
+                print_byType('\tc:\\path\\to\\alternate module.py',True)
+                print_byType('',True)
+                print_byType('These are valid module names:',True)
+                print_byType('',True)
+                print_byType('\t/path/to/alternate_module.py',True)
+                print_byType('\tc:\\path\\to\\alternate_module.py',True)
+                print_byType('',True)
+                exit(0)
+        else:
+            defaultHelper()
 
     #try assigning the DEBUG variable from mumc_config.py file
     #if DEBUG does not exsit go to except and completely rebuild the mumc_config.py file
@@ -8741,20 +8808,23 @@ try:
 
 #the exception
 except (AttributeError, ModuleNotFoundError):
-    GLOBAL_DEBUG=0
-    #GLOBAL_DEBUG=1
-    #GLOBAL_DEBUG=2
-    #GLOBAL_DEBUG=3
-    #GLOBAL_DEBUG=4
+    if (not (GLOBAL_TRIED_ALT_CONFIG)):
+        GLOBAL_DEBUG=0
+        #GLOBAL_DEBUG=1
+        #GLOBAL_DEBUG=2
+        #GLOBAL_DEBUG=3
+        #GLOBAL_DEBUG=4
 
-    #we are here because the mumc_config.py file does not exist
-    #this is either the first time the script is running or mumc_config.py file was deleted
-    #when this happens create a new mumc_config.py file
-    #another possible reason we are here...
-    #the above attempt to set GLOBAL_DEBUG=cfg.DEBUG failed likely because DEBUG is missing from the mumc_config.py file
-    #when this happens create a new mumc_config.py file
-    update_config = False
-    build_configuration_file(None,update_config)
+        #we are here because the mumc_config.py file does not exist
+        #this is either the first time the script is running or mumc_config.py file was deleted
+        #when this happens create a new mumc_config.py file
+        #another possible reason we are here...
+        #the above attempt to set GLOBAL_DEBUG=cfg.DEBUG failed likely because DEBUG is missing from the mumc_config.py file
+        #when this happens create a new mumc_config.py file
+        update_config = False
+        build_configuration_file(None,update_config)
+    else:
+        defaultHelper()
 
     #exit gracefully after building config
     exit(0)
@@ -8775,5 +8845,7 @@ deleteItems=get_media_items()
 
 #show and delete media items
 output_itemsToDelete(deleteItems)
+
+print_byType('Time Stamp: ' + datetime.now().strftime('%Y%m%d%H%M%S'),print_script_header)
 
 ############# END OF SCRIPT #############
