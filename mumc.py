@@ -5249,7 +5249,7 @@ def get_media_items():
                                             itemIsWhiteListed_Display=itemIsWhiteListed_Local
 
                                         #Save media item's whitelist state when multiple users are monitored and we want to keep media items based on any user whitelisting the parent library
-                                        if ((itemIsWhiteListed_Local) and (multiuser_whitelist_movie == 0)):
+                                        if ((itemIsWhiteListed_Local) and (multiuser_whitelist_movie == 0) and (not(itemIsBlackTagged))):
                                             movie_whitelists.append(item['Id'])
                                     else: #check if we are at a blacklist queried data_list_pos
                                         itemIsWhiteListed_Local,itemIsWhiteListed_Remote=get_isItemWhitelisted(item,LibraryID_BlkLst,LibraryNetPath_BlkLst,LibraryPath_BlkLst,currentPosition,
@@ -5262,7 +5262,7 @@ def get_media_items():
                                             itemIsWhiteListed_Display=itemIsWhiteListed_Local
 
                                         #Save media item's whitelist state when multiple users are monitored and we want to keep media items based on any user whitelisting the parent library
-                                        if ((itemIsWhiteListed_Local) and (multiuser_whitelist_movie == 0)):
+                                        if ((itemIsWhiteListed_Local) and (multiuser_whitelist_movie == 0) and (not(itemIsBlackTagged))):
                                             movie_whitelists.append(item['Id'])
 
                                     #Decide if media item meets the played count filter criteria
@@ -5745,7 +5745,7 @@ def get_media_items():
                                             itemIsWhiteListed_Display=itemIsWhiteListed_Local
 
                                         #Save media item's whitelist state when multiple users are monitored and we want to keep media items based on any user whitelisting the parent library
-                                        if ((itemIsWhiteListed_Local) and (multiuser_whitelist_episode == 0)):
+                                        if ((itemIsWhiteListed_Local) and (multiuser_whitelist_episode == 0) and (not(itemIsBlackTagged))):
                                             episode_whitelists.append(item['Id'])
                                     else: #check if we are at a blacklist queried data_list_pos
                                         itemIsWhiteListed_Local,itemIsWhiteListed_Remote=get_isItemWhitelisted(item,LibraryID_BlkLst,LibraryNetPath_BlkLst,LibraryPath_BlkLst,currentPosition,
@@ -5758,7 +5758,7 @@ def get_media_items():
                                             itemIsWhiteListed_Display=itemIsWhiteListed_Local
 
                                         #Save media item's whitelist state when multiple users are monitored and we want to keep media items based on any user whitelisting the parent library
-                                        if ((itemIsWhiteListed_Local) and (multiuser_whitelist_episode == 0)):
+                                        if ((itemIsWhiteListed_Local) and (multiuser_whitelist_episode == 0) and (not(itemIsBlackTagged))):
                                             episode_whitelists.append(item['Id'])
 
                                     #Decide if media item meets the played count filter criteria
@@ -6260,7 +6260,7 @@ def get_media_items():
                                             itemIsWhiteListed_Display=itemIsWhiteListed_Local
 
                                         #Save media item's whitelist state when multiple users are monitored and we want to keep media items based on any user whitelisting the parent library
-                                        if ((itemIsWhiteListed_Local) and (multiuser_whitelist_audio == 0)):
+                                        if ((itemIsWhiteListed_Local) and (multiuser_whitelist_audio == 0) and (not(itemIsBlackTagged))):
                                             audio_whitelists.append(item['Id'])
                                     else: #check if we are at a blacklist queried data_list_pos
                                         itemIsWhiteListed_Local,itemIsWhiteListed_Remote=get_isItemWhitelisted(item,LibraryID_BlkLst,LibraryNetPath_BlkLst,LibraryPath_BlkLst,currentPosition,
@@ -6273,7 +6273,7 @@ def get_media_items():
                                             itemIsWhiteListed_Display=itemIsWhiteListed_Local
 
                                         #Save media item's whitelist state when multiple users are monitored and we want to keep media items based on any user whitelisting the parent library
-                                        if ((itemIsWhiteListed_Local) and (multiuser_whitelist_audio == 0)):
+                                        if ((itemIsWhiteListed_Local) and (multiuser_whitelist_audio == 0) and (not(itemIsBlackTagged))):
                                             audio_whitelists.append(item['Id'])
 
                                     #Decide if media item meets the played count filter criteria
@@ -6760,7 +6760,7 @@ def get_media_items():
                                             itemIsWhiteListed_Display=itemIsWhiteListed_Local
 
                                         #Save media item's whitelist state when multiple users are monitored and we want to keep media items based on any user whitelisting the parent library
-                                        if ((itemIsWhiteListed_Local) and (multiuser_whitelist_audiobook == 0)):
+                                        if ((itemIsWhiteListed_Local) and (multiuser_whitelist_audiobook == 0) and (not(itemIsBlackTagged))):
                                             audiobook_whitelists.append(item['Id'])
                                     else: #check if we are at a blacklist queried data_list_pos
                                         itemIsWhiteListed_Local,itemIsWhiteListed_Remote=get_isItemWhitelisted(item,LibraryID_BlkLst,LibraryNetPath_BlkLst,LibraryPath_BlkLst,currentPosition,
@@ -6773,7 +6773,7 @@ def get_media_items():
                                             itemIsWhiteListed_Display=itemIsWhiteListed_Local
 
                                         #Save media item's whitelist state when multiple users are monitored and we want to keep media items based on any user whitelisting the parent library
-                                        if ((itemIsWhiteListed_Local) and (multiuser_whitelist_audiobook == 0)):
+                                        if ((itemIsWhiteListed_Local) and (multiuser_whitelist_audiobook == 0) and (not(itemIsBlackTagged))):
                                             audiobook_whitelists.append(item['Id'])
 
                                     #Decide if media item meets the played count filter criteria
